@@ -2,7 +2,7 @@ import yargs from 'yargs';
 import path from 'path';
 import * as commands from './commands';
 
-const NO_COMMAND = async () => (console.log('Unknown command'));
+const NO_COMMAND = async () => { throw new Error('Unknown command'); };
 const DEFAULT_CONFIG = {};
 
 export default async (args) => {
