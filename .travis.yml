@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - '10'
+before_install:
+  - npm i -g npm@latest
+install:
+  - npm ci
+script:
+  - npm test
+cache: npm
+after_success: npm run coverage
+deploy:
+  provider: npm
+  email: ammmze@gmail.com
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: MashupMill/npm-docker-scripts
+  api_key:
+    secure: jILA0zQ/587cRqFsz3sKydADYvv7eyFqt+QMk4tilfA542Sy864l/d51VZ/DSqOVggL4m7Y881mfU7QeIVP2ub7DHxM9So2zROx+tUtY5ogQUtJ0/rZfYNH3Wqz72tpokNHX9oaQbmWJrYGG2IXgx9SCLr1I05WQcapE2UXA7d9UxE9Vyvs+cxo9waenc8BDLeJPW4VamypKw0Rmr2RjymQ/xbekt3lLJBr0nI/83n/MKLM0l54ke2/Eoge2+KYQ+jgBf026lPcXSvsZ8isbvo9W0JKKpst/ttWn1N3OJruPwnCt2CYGsZk0p3HTselW0Y7fgYjeUOmrepGLflRVlbFRrxL/PBrEC+5hyL31d866hNjJQ9/+eKb5idYz0C3tZT5F5bA3xVRe5ia6aEI07+pnxquEn2qFpEPdsPEGNdUhMzLCsiqxqv7qmndOdecVvXRj47Dtt4BQBLzURRD5Rb7qTVBpQnjgFOVFGdnfa34Wxg36CuHaqbyn7MZjvopNiEBrPwWjh5vcmMPGgtTRh5uxXM+u37WMKle0GhWse+jcWHOWhJrlF0l1OAQHRd93xX3wAbFI89N6JsjOi+N85zXYAZW0t6QTDI5XDPFx8piDrszcWz8yGhW625UZg45VBDwckitNtQ7grtiYJk/DA2CVJJDrJVTiAc3216TC+1o=

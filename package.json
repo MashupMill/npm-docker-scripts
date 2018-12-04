@@ -11,7 +11,8 @@
   ],
   "scripts": {
     "prepare": "babel --copy-files --out-dir lib/ src/",
-    "test": "mocha"
+    "test": "cross-env NODE_ENV=test nyc mocha",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "author": "",
   "license": "MIT",
@@ -23,7 +24,10 @@
     "@babel/preset-env": "^7.2.0",
     "@babel/register": "^7.0.0",
     "chai": "^4.2.0",
+    "coveralls": "^3.0.2",
+    "cross-env": "^5.2.0",
     "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
     "sinon": "^7.1.1"
   },
   "dependencies": {
