@@ -2,9 +2,9 @@ import exec from 'executive';
 import { createSandbox } from 'sinon';
 import { expect } from 'chai';
 import * as utils from '../../src/utils';
-import { build } from '../../src/commands';
+import { push } from '../../src/commands';
 
-describe('build', () => {
+describe('push', () => {
     const sandbox = createSandbox();
     const registry = 'hub.docker.com';
     const image = 'foo';
@@ -16,25 +16,26 @@ describe('build', () => {
         sandbox.restore();
     });
     it('should execute a command', async () => {
-        await build({ registry, image, tag });
+        await push({ registry, image, tag });
         expect(exec.strict.calledOnce).to.equal(true);
     });
-    it('should execute the command in the given working directory', async () => {
-        await build({ dockerfilePath: __dirname, registry, image, tag });
-        expect(exec.strict.args[0][1].cwd).to.equal(__dirname);
-    });
-    it('should execute a "docker build" command', async () => {
-        await build({ registry, image, tag });
-        expect(exec.strict.args[0][0]).to.match(/docker build .*/);
+    it('should execute a "docker push" command', async () => {
+        await push({ registry, image, tag });
+        expect(exec.strict.args[0][0]).to.match(/docker push .*/);
     });
     it('should include the tag info', async () => {
-        await build({ registry, image, tag });
-        expect(exec.strict.args[0][0]).to.equal(`docker build --tag ${registry}/${image}:${tag[0]} .`);
+        await push({ registry, image, tag });
+        expect(exec.strict.args[0][0]).to.equal(`docker push ${registry}/${image}:${tag[0]}`);
+    });
+    it('should execute a "docker login" command when providing a username and password', async () => {
+        await push({ registry, image, tag, username: 'anonymous', password: 'anonymous' });
+        expect(exec.strict.args[0][0]).to.equal(`docker login --username anonymous --password anonymous ${registry}`);
     });
     it('should throw an error if the status code is not 0', async () => {
         exec.strict.throws({ status: 1 });
         try {
-            await build({ registry, image, tag: [], tagVersion: true });
+            const result = await push({ registry, image, tag: [], tagVersion: true });
+            console.log(result);
         } catch (e) {
             return;
         }
@@ -42,12 +43,12 @@ describe('build', () => {
     });
     it('should include a version tag when tagVersion is set to true', async () => {
         sandbox.stub(utils, 'getPackageConfig').returns({ version: '1.0.0' });
-        await build({ registry, image, tag: [], tagVersion: true });
-        expect(exec.strict.args[0][0]).to.equal(`docker build --tag ${registry}/${image}:1.0.0 .`);
+        await push({ registry, image, tag: [], tagVersion: true });
+        expect(exec.strict.args[0][0]).to.equal(`docker push ${registry}/${image}:1.0.0`);
     });
     it('should include a branch tag when tagBranch is set to true', async () => {
         sandbox.stub(utils, 'getBranch').returns('foo');
-        await build({ registry, image, tag: [], tagBranch: true });
-        expect(exec.strict.args[0][0]).to.equal(`docker build --tag ${registry}/${image}:foo .`);
+        await push({ registry, image, tag: [], tagBranch: true });
+        expect(exec.strict.args[0][0]).to.equal(`docker push ${registry}/${image}:foo`);
     });
 });

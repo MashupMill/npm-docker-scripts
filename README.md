@@ -10,4 +10,25 @@
 
 Docker scripts for npm projects to allow building and push docker images as part of an npm build
 
+## Usage
+
+Update your `package.json` with to something like this:
+
+```json
+{
+  "scripts": {
+    "prepublishOnly": "mashupmill-docker-scripts build",
+    "publish": "mashupmill-docker-scripts push"
+  },
+  "dockerConfig": {
+      "registry": "docker.my-company.com",
+      "image": "my-docker-image-name",
+      "tag": ["latest"],
+      "tagBranch": true,
+      "tagVersion": true
+    }
+}
+```
+
+If you need to authenticate with your docker registry you can either have your build system inject `DOCKER_USERNAME` and `DOCKER_PASSWORD` environment variables or (not recommended) put your `username` and `password` in the `dockerConfig` object in your `package.json` 
 

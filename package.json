@@ -1,12 +1,13 @@
 {
   "name": "@mashupmill/docker-scripts",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
   "bin": {
     "mashupmill-docker-scripts": "lib/cli.js"
   },
   "files": [
+    "src",
     "lib"
   ],
   "scripts": {
