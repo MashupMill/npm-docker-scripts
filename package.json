@@ -26,6 +26,7 @@
     "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/preset-env": "^7.2.0",
     "@babel/register": "^7.0.0",
+    "babel-plugin-istanbul": "^5.1.0",
     "chai": "^4.2.0",
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
@@ -42,9 +43,19 @@
   },
   "nyc": {
     "all": true,
-    "cache": false,
-    "require": ["@babel/register"],
-    "reporter": ["lcov", "text", "text-summary"],
-    "include": ["src/**/*.js"]
+    "cache": true,
+    "require": [
+      "@babel/register"
+    ],
+    "reporter": [
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "include": [
+      "src/**/*.js"
+    ],
+    "sourceMap": false,
+    "instrument": false
   }
 }
