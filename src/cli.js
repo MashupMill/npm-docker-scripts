@@ -2,4 +2,8 @@
 
 import docker from './index';
 
-docker(process.argv);
+docker(process.argv).catch(e => {
+    const status = e && e.status;
+    console.error("Failed to run", e);
+    process.exit(status || 1);
+});

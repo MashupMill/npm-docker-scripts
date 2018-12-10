@@ -16,8 +16,17 @@ export default async ({ registry, image, tagVersion, tagBranch, tag = [], userna
         await exec.strict(`docker login --username ${username} --password ${password} ${registry}`);
     }
 
-    return await Promise.all(tags.map(async (tag) => {
-        const command = `docker push ${getDockerImageName({ registry, image, tag })}`;
-        return await exec.strict(command);
-    }));
+    const results = [];
+    for (let i = 0; i < tags.length; i++) {
+        const tag = tags[i];
+        const fullName = getDockerImageName({registry, image, tag});
+        const command = `docker push ${fullName}`;
+        try {
+            results.push(await exec.strict(command));
+        } catch (e) {
+            console.error(`Failed to push ${fullName}`);
+            throw e;
+        }
+    }
+    return results;
 }
